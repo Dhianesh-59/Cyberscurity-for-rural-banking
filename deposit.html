@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Deposit - Rural Digital Banking</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        Rural Digital Banking
+    </div>
+
+    <div class="dashboard-user">
+
+        Welcome, {{ session["logged_in_user"] }}
+
+        <a href="/logout">
+            Logout
+        </a>
+
+    </div>
+
+</header>
+
+
+<div class="deposit-container">
+
+    <div class="deposit-header">
+
+        <div>
+
+            <h1>Deposit Money</h1>
+
+            <p>
+                Add money securely to your bank account
+            </p>
+
+        </div>
+
+        <div class="security-status">
+
+            <span></span>
+
+            Secure Transaction
+
+        </div>
+
+    </div>
+
+
+    <div class="deposit-grid">
+
+
+        <div class="deposit-card">
+
+            <div class="deposit-card-title">
+
+                <h2>Deposit Amount</h2>
+
+            </div>
+
+
+            {% if error %}
+
+            <div class="deposit-error">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            {% if success %}
+
+            <div class="deposit-success">
+                {{ success }}
+            </div>
+
+            {% endif %}
+
+
+            <form method="POST" action="{{ url_for('deposit') }}">
+
+
+                <div class="deposit-form-group">
+
+                    <label>Account Number</label>
+
+                    <input
+                        type="text"
+                        value="{{ account_number }}"
+                        readonly
+                    >
+
+                </div>
+
+
+                <div class="deposit-form-group">
+
+                    <label>Current Balance</label>
+
+                    <input
+                        type="text"
+                        value="₹ {{ '%.2f'|format(balance) }}"
+                        readonly
+                    >
+
+                </div>
+
+
+                <div class="deposit-form-group">
+
+                    <label>Amount</label>
+
+                    <input
+                        type="number"
+                        name="amount"
+                        min="1"
+                        step="0.01"
+                        placeholder="Enter deposit amount"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="deposit-form-group">
+
+                    <label>Description</label>
+
+                    <input
+                        type="text"
+                        name="description"
+                        placeholder="Example: Cash Deposit"
+                        maxlength="100"
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="deposit-button">
+
+                    Deposit Money
+
+                </button>
+
+
+            </form>
+
+
+            <a href="{{ url_for('dashboard') }}"
+               class="deposit-back">
+
+                ← Back to Dashboard
+
+            </a>
+
+
+        </div>
+
+
+        <div class="deposit-card">
+
+            <div class="deposit-card-title">
+
+                <h2>Transaction Security</h2>
+
+            </div>
+
+
+            <div class="security-item">
+
+                <div class="security-check">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>Secure Session</strong>
+
+                    <span>
+                        Your banking session is protected
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="security-item">
+
+                <div class="security-check">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>Account Verification</strong>
+
+                    <span>
+                        Transaction is linked to your account
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="security-item">
+
+                <div class="security-check">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>Transaction Recording</strong>
+
+                    <span>
+                        Every deposit is recorded securely
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<footer class="footer">
+
+    Rural Digital Banking |
+    AI-Based Cybersecurity Framework
+
+</footer>
+
+</body>
+
+</html>

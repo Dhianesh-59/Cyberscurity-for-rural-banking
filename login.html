@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Secure Login - Rural Digital Banking</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        Rural Digital Banking
+    </div>
+
+    <div class="security">
+        Secure Banking Portal
+    </div>
+
+</header>
+
+
+<div class="auth-container">
+
+    <div class="auth-box">
+
+        <h1>
+            Secure Login
+        </h1>
+
+        <p class="subtitle">
+            Sign in to access your banking account
+        </p>
+
+
+        {% if error %}
+
+        <div class="registration-error">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        <form method="POST"
+              action="{{ url_for('login') }}"
+              autocomplete="off">
+
+
+            <div class="form-group">
+
+                <label for="username">
+                    Customer ID / Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your username"
+                    autocomplete="username"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn">
+
+                Secure Login
+
+            </button>
+
+
+        </form>
+
+
+        <div class="security-note">
+
+            Your login is monitored by the banking
+            cybersecurity system.
+
+        </div>
+
+
+        <div class="auth-link">
+
+            New customer?
+
+            <a href="{{ url_for('register') }}">
+                Create an account
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<footer class="footer">
+
+    Rural Digital Banking |
+    AI-Based Cybersecurity Framework
+
+</footer>
+
+
+</body>
+
+</html>

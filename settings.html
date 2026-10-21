@@ -1,0 +1,362 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | RuralBank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="feature-page settings-page">
+
+<header class="navbar">
+    <div class="logo">
+        RuralBank
+        <span class="feature-logo-sub">Digital Banking</span>
+    </div>
+    <nav class="dashboard-user">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/transactions">Transactions</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<main class="feature-container settings-container">
+
+    <section class="feature-heading">
+        <div>
+            <p class="eyebrow">ACCOUNT MANAGEMENT</p>
+            <h1>Settings</h1>
+            <p>Manage your profile, payment security and account preferences.</p>
+        </div>
+        <div class="settings-avatar">{{ username[:1]|upper }}</div>
+    </section>
+
+    {% if message %}
+        <div class="notice success-notice" role="status">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div class="notice error-notice" role="alert">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <!-- ACCOUNT PROFILE -->
+    <section class="settings-profile panel-card">
+        <div class="profile-avatar">{{ username[:1]|upper }}</div>
+
+        <div class="settings-profile-info">
+            <h2>{{ username }}</h2>
+            <p>{{ email or 'Email not available' }}</p>
+            <span class="small-muted">RuralBank account</span>
+        </div>
+
+        <div class="profile-status">
+            <span></span>
+            Account
+        </div>
+    </section>
+
+    <!-- SETTINGS NAVIGATION -->
+    <section class="settings-grid">
+
+        <a href="#profile-settings" class="panel-card settings-menu-card">
+            <div class="panel-symbol">♙</div>
+            <div>
+                <h2>Profile & Account</h2>
+                <p>View your registered account information.</p>
+            </div>
+            <span class="settings-arrow">→</span>
+        </a>
+
+        <a href="#security-settings" class="panel-card settings-menu-card">
+            <div class="panel-symbol">⌑</div>
+            <div>
+                <h2>Security & Login</h2>
+                <p>Manage your password and login protection.</p>
+            </div>
+            <span class="settings-arrow">→</span>
+        </a>
+
+        <a href="#payment-security" class="panel-card settings-menu-card">
+            <div class="panel-symbol pin-symbol">●</div>
+            <div>
+                <h2>Payment Security</h2>
+                <p>Set or change your demo payment PIN.</p>
+            </div>
+            <span class="settings-arrow">→</span>
+        </a>
+
+        <a href="#notification-settings" class="panel-card settings-menu-card">
+            <div class="panel-symbol">◉</div>
+            <div>
+                <h2>Notifications & Alerts</h2>
+                <p>Manage your in-app notification preference.</p>
+            </div>
+            <span class="settings-arrow">→</span>
+        </a>
+
+        <a href="#activity-settings" class="panel-card settings-menu-card">
+            <div class="panel-symbol">◷</div>
+            <div>
+                <h2>Activity & Transactions</h2>
+                <p>Review your transaction history.</p>
+            </div>
+            <span class="settings-arrow">→</span>
+        </a>
+
+        <a href="#support-settings" class="panel-card settings-menu-card">
+            <div class="panel-symbol">?</div>
+            <div>
+                <h2>Preferences & Support</h2>
+                <p>Find help and account navigation options.</p>
+            </div>
+            <span class="settings-arrow">→</span>
+        </a>
+
+    </section>
+
+    <!-- PROFILE DETAILS -->
+    <section id="profile-settings" class="panel-card settings-section">
+        <div class="panel-title">
+            <div class="panel-symbol">♙</div>
+            <div>
+                <h2>Profile & Account</h2>
+                <p>Your registered account information.</p>
+            </div>
+        </div>
+
+        <div class="settings-detail-row">
+            <span>Username</span>
+            <strong>{{ username }}</strong>
+        </div>
+
+        <div class="settings-detail-row">
+            <span>Registered email</span>
+            <strong>{{ email or 'Not available' }}</strong>
+        </div>
+
+        <p class="small-muted">
+            Contact details should only be changed after identity verification.
+        </p>
+    </section>
+
+    <!-- CHANGE PASSWORD -->
+    <section id="security-settings" class="panel-card settings-section">
+        <div class="panel-title">
+            <div class="panel-symbol">⌑</div>
+            <div>
+                <h2>Security & Login</h2>
+                <p>Keep your account credentials secure.</p>
+            </div>
+        </div>
+
+        <form method="post" class="feature-form">
+            <input type="hidden" name="action" value="password">
+
+            <label for="current_password">Current password</label>
+            <input
+                id="current_password"
+                type="password"
+                name="current_password"
+                autocomplete="current-password"
+                required
+            >
+
+            <label for="new_password">New password</label>
+            <input
+                id="new_password"
+                type="password"
+                name="new_password"
+                minlength="8"
+                autocomplete="new-password"
+                required
+            >
+
+            <label for="confirm_password">Confirm new password</label>
+            <input
+                id="confirm_password"
+                type="password"
+                name="confirm_password"
+                minlength="8"
+                autocomplete="new-password"
+                required
+            >
+
+            <button class="feature-primary-btn" type="submit">
+                Update password
+            </button>
+        </form>
+
+        <p class="security-footnote">
+            Use a unique password and never share your login credentials.
+        </p>
+    </section>
+
+    <!-- PAYMENT PIN -->
+    <section id="payment-security" class="panel-card settings-section">
+        <div class="panel-title">
+            <div class="panel-symbol pin-symbol">●</div>
+            <div>
+                <h2>Payment Security</h2>
+                <p>
+                    {% if pin_set %}
+                        Your demo payment PIN is configured.
+                    {% else %}
+                        Create a demo payment PIN for payment authorization.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <form method="post" class="feature-form">
+            <input type="hidden" name="action" value="pin">
+
+            {% if pin_set %}
+                <label for="current_pin">Current payment PIN</label>
+                <input
+                    id="current_pin"
+                    type="password"
+                    name="current_pin"
+                    inputmode="numeric"
+                    pattern="[0-9]{4}"
+                    maxlength="4"
+                    autocomplete="off"
+                    required
+                >
+            {% endif %}
+
+            <label for="new_pin">
+                {% if pin_set %}New{% else %}Create{% endif %} 4-digit PIN
+            </label>
+            <input
+                id="new_pin"
+                type="password"
+                name="new_pin"
+                inputmode="numeric"
+                pattern="[0-9]{4}"
+                maxlength="4"
+                minlength="4"
+                autocomplete="off"
+                required
+            >
+
+            <label for="confirm_pin">Confirm payment PIN</label>
+            <input
+                id="confirm_pin"
+                type="password"
+                name="confirm_pin"
+                inputmode="numeric"
+                pattern="[0-9]{4}"
+                maxlength="4"
+                minlength="4"
+                autocomplete="off"
+                required
+            >
+
+            <button class="feature-primary-btn purple-btn" type="submit">
+                {% if pin_set %}Change PIN{% else %}Set payment PIN{% endif %}
+            </button>
+        </form>
+
+        <p class="security-footnote">
+            This is a project-demo PIN, not a real UPI PIN.
+            Never share your PIN or OTP.
+        </p>
+    </section>
+
+    <!-- NOTIFICATIONS -->
+    <section id="notification-settings" class="panel-card settings-section">
+        <div class="panel-title">
+            <div class="panel-symbol">◉</div>
+            <div>
+                <h2>Notifications & Alerts</h2>
+                <p>Choose your in-app notification preference.</p>
+            </div>
+        </div>
+
+        <form method="post" class="notification-form">
+            <input type="hidden" name="action" value="notifications">
+
+            <label class="toggle-row">
+                <span>
+                    <strong>Transaction updates</strong>
+                    <small>Enable or disable the saved notification preference.</small>
+                </span>
+
+                <input
+                    type="checkbox"
+                    name="notifications_enabled"
+                    value="on"
+                    {% if notifications_enabled %}checked{% endif %}
+                >
+            </label>
+
+            <button class="feature-primary-btn" type="submit">
+                Save preference
+            </button>
+        </form>
+
+        <p class="security-footnote">
+            This preference does not send emails or SMS unless those services
+            are implemented separately.
+        </p>
+    </section>
+
+    <!-- ACTIVITY -->
+    <section id="activity-settings" class="panel-card settings-section">
+        <div class="panel-title">
+            <div class="panel-symbol">◷</div>
+            <div>
+                <h2>Activity & Transactions</h2>
+                <p>Review your recent banking activity.</p>
+            </div>
+        </div>
+
+        <p>
+            Review completed transactions and their recorded amounts and dates.
+        </p>
+
+        <a class="feature-primary-btn settings-action-link" href="/transactions">
+            View transaction history →
+        </a>
+    </section>
+
+    <!-- SUPPORT -->
+    <section id="support-settings" class="panel-card settings-section">
+        <div class="panel-title">
+            <div class="panel-symbol">?</div>
+            <div>
+                <h2>Preferences & Support</h2>
+                <p>Help and account navigation.</p>
+            </div>
+        </div>
+
+        <div class="settings-detail-row">
+            <span>Application</span>
+            <strong>RuralBank Digital Banking</strong>
+        </div>
+
+        <div class="settings-detail-row">
+            <span>Security</span>
+            <strong>Demo environment</strong>
+        </div>
+
+        <a class="settings-text-link" href="/dashboard">
+            ← Return to dashboard
+        </a>
+    </section>
+
+    <a class="back-link" href="/dashboard">← Back to dashboard</a>
+
+</main>
+
+<footer class="footer">
+    Rural Digital Banking | AI-Based Cybersecurity Framework
+</footer>
+
+</body>
+</html>

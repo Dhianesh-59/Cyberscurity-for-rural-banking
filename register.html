@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Register - Rural Digital Banking</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<header class="navbar">
+
+    <div class="logo">
+        Rural Digital Banking
+    </div>
+
+    <div class="security">
+        Secure Registration
+    </div>
+
+</header>
+
+
+<div class="auth-container">
+
+
+    <div class="auth-box">
+
+
+        <h1>Create Account</h1>
+
+
+        <p class="subtitle">
+            Register for secure digital banking
+        </p>
+
+
+        {% if success %}
+
+        <!-- REGISTRATION SUCCESS -->
+
+        <div class="registration-success">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <h2>
+                Registration Successful
+            </h2>
+
+            <p>
+                Your rural digital banking account
+                has been created successfully.
+            </p>
+
+            <a href="/login"
+               class="success-btn">
+
+                Continue to Login
+
+            </a>
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- REGISTRATION FORM -->
+
+        <form method="POST"
+              autocomplete="off">
+
+
+            <!-- USERNAME -->
+
+            <div class="form-group">
+
+                <label>
+                    Customer Username
+                </label>
+
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Create username"
+                    autocomplete="off"
+                    required>
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label>
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="example@gmail.com"
+                    autocomplete="off"
+                    required>
+
+                <div
+                    id="emailMessage"
+                    class="field-message">
+                </div>
+
+            </div>
+
+
+            <!-- MOBILE NUMBER -->
+
+            <div class="form-group">
+
+                <label>
+                    Mobile Number
+                </label>
+
+
+                <div class="mobile-row">
+
+
+                    <select
+                        id="countryCode"
+                        name="country_code"
+                        class="country-code">
+
+
+                        <option value="+91">
+                            🇮🇳 +91
+                        </option>
+
+
+                        <option value="+1">
+                            🇺🇸 +1
+                        </option>
+
+
+                        <option value="+44">
+                            🇬🇧 +44
+                        </option>
+
+
+                        <option value="+61">
+                            🇦🇺 +61
+                        </option>
+
+
+                        <option value="+971">
+                            🇦🇪 +971
+                        </option>
+
+
+                        <option value="+65">
+                            🇸🇬 +65
+                        </option>
+
+
+                    </select>
+
+
+                    <input
+                        type="tel"
+                        id="mobile"
+                        name="mobile"
+                        placeholder="Enter 10-digit mobile number"
+                        maxlength="10"
+                        inputmode="numeric"
+                        autocomplete="off"
+                        required>
+
+
+                </div>
+
+
+                <div
+                    id="mobileMessage"
+                    class="field-message">
+                </div>
+
+
+            </div>
+
+
+            <!-- CREATE PASSWORD -->
+
+            <div class="form-group">
+
+                <label>
+                    Create Password
+                </label>
+
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Create a strong password"
+                    autocomplete="new-password"
+                    required>
+
+
+                <!-- PASSWORD REQUIREMENTS -->
+
+                <div
+                    id="passwordRequirements"
+                    class="password-requirements">
+
+
+                    <div
+                        id="length"
+                        class="requirement invalid">
+
+                        <span>●</span>
+                        Minimum 8 characters
+
+                    </div>
+
+
+                    <div
+                        id="uppercase"
+                        class="requirement invalid">
+
+                        <span>●</span>
+                        One uppercase letter (A-Z)
+
+                    </div>
+
+
+                    <div
+                        id="lowercase"
+                        class="requirement invalid">
+
+                        <span>●</span>
+                        One lowercase letter (a-z)
+
+                    </div>
+
+
+                    <div
+                        id="number"
+                        class="requirement invalid">
+
+                        <span>●</span>
+                        One number (0-9)
+
+                    </div>
+
+
+                    <div
+                        id="special"
+                        class="requirement invalid">
+
+                        <span>●</span>
+                        One special character (!@#$%)
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- CONFIRM PASSWORD -->
+
+            <div class="form-group">
+
+                <label>
+                    Confirm Password
+                </label>
+
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirm_password"
+                    placeholder="Re-enter your password"
+                    autocomplete="new-password"
+                    required>
+
+
+                <div
+                    id="passwordMatch"
+                    class="password-match">
+                </div>
+
+
+            </div>
+
+
+            <!-- TERMS -->
+
+            <div class="terms">
+
+                <label>
+
+                    <input
+                        type="checkbox"
+                        name="terms"
+                        required>
+
+
+                    <span>
+
+                        I agree to the secure banking
+
+                        <a href="#">
+                            Terms & Privacy Policy
+                        </a>
+
+                    </span>
+
+
+                </label>
+
+            </div>
+
+
+            <!-- ERROR MESSAGE -->
+
+            {% if error %}
+
+            <div class="registration-error">
+
+                ✕ {{ error }}
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- REGISTER BUTTON -->
+
+            <button
+                class="btn"
+                type="submit">
+
+                Create Secure Account
+
+            </button>
+
+
+        </form>
+
+
+        <!-- SECURITY MESSAGE -->
+
+        <div class="security-note">
+
+            Account credentials are protected by
+            the banking security framework.
+
+        </div>
+
+
+        <!-- LOGIN LINK -->
+
+        <div class="auth-link">
+
+            Already registered?
+
+            <a href="/login">
+                Sign in
+            </a>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+    Rural Digital Banking |
+    AI-Based Cybersecurity Framework
+
+</footer>
+
+
+<!-- EXTERNAL JAVASCRIPT -->
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+</body>
+
+</html>

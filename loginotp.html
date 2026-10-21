@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        Rural Digital Banking
+    </div>
+
+    <div class="security">
+        Secure Verification
+    </div>
+
+</header>
+
+
+<div class="auth-container">
+
+    <div class="auth-box otp-box">
+
+        <div class="otp-icon">
+            ✓
+        </div>
+
+        <h1>
+            OTP Verification
+        </h1>
+
+        <p class="subtitle">
+
+            Enter the 6-digit verification code
+            generated for your secure login.
+
+        </p>
+
+
+        {% if error %}
+
+        <div class="otp-error">
+
+            ✕ {{ error }}
+
+        </div>
+
+        {% endif %}
+
+
+        {% if demo_otp %}
+
+        <div id="demoLoginOtp" class="test-otp">
+
+            OTP: <strong>{{ demo_otp }}</strong>
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="otp-timer">
+
+            OTP expires in
+            <strong id="loginOtpTimer">10</strong>
+            seconds
+
+        </div>
+
+
+        <form method="POST"
+              autocomplete="off"
+              id="loginOtpForm">
+
+
+            <label class="otp-label">
+
+                Enter OTP
+
+            </label>
+
+
+            <div class="otp-container">
+
+                <input
+                    type="text"
+                    class="otp-input login-otp-input"
+                    maxlength="1"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    autofocus>
+
+                <input
+                    type="text"
+                    class="otp-input login-otp-input"
+                    maxlength="1"
+                    inputmode="numeric">
+
+                <input
+                    type="text"
+                    class="otp-input login-otp-input"
+                    maxlength="1"
+                    inputmode="numeric">
+
+                <input
+                    type="text"
+                    class="otp-input login-otp-input"
+                    maxlength="1"
+                    inputmode="numeric">
+
+                <input
+                    type="text"
+                    class="otp-input login-otp-input"
+                    maxlength="1"
+                    inputmode="numeric">
+
+                <input
+                    type="text"
+                    class="otp-input login-otp-input"
+                    maxlength="1"
+                    inputmode="numeric">
+
+            </div>
+
+
+            <input
+                type="hidden"
+                name="otp"
+                id="loginOtpValue">
+
+
+            <button
+                type="submit"
+                class="btn otp-button"
+                id="loginVerifyButton">
+
+                Verify OTP
+
+            </button>
+
+        </form>
+
+
+        <div id="loginExpiredMessage"
+             class="otp-error"
+             style="display:none;">
+
+            OTP expired. Please resend OTP.
+
+        </div>
+
+
+        <div class="otp-resend">
+
+            Didn't receive the OTP?
+
+            <a href="/resend_login_otp">
+                Resend OTP
+            </a>
+
+        </div>
+
+
+        <div class="security-note">
+
+            Never share your OTP with anyone.
+            Banking staff will never ask for your OTP.
+
+        </div>
+
+
+        <div class="auth-link">
+
+            <a href="/login">
+                ← Back to Login
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer class="footer">
+
+    Rural Digital Banking |
+    AI-Based Cybersecurity Framework
+
+</footer>
+
+
+<script>
+
+const loginOtpInputs =
+    document.querySelectorAll(".login-otp-input");
+
+const loginOtpForm =
+    document.getElementById("loginOtpForm");
+
+const loginOtpValue =
+    document.getElementById("loginOtpValue");
+
+const loginOtpTimer =
+    document.getElementById("loginOtpTimer");
+
+const demoLoginOtp =
+    document.getElementById("demoLoginOtp");
+
+const loginExpiredMessage =
+    document.getElementById("loginExpiredMessage");
+
+const loginVerifyButton =
+    document.getElementById("loginVerifyButton");
+
+
+loginOtpInputs.forEach((input, index) => {
+
+    input.addEventListener("input", function () {
+
+        this.value = this.value.replace(/[^0-9]/g, "");
+
+        if (
+            this.value &&
+            index < loginOtpInputs.length - 1
+        ) {
+
+            loginOtpInputs[index + 1].focus();
+
+        }
+
+        updateLoginOtp();
+
+    });
+
+
+    input.addEventListener("keydown", function (event) {
+
+        if (
+            event.key === "Backspace" &&
+            !this.value &&
+            index > 0
+        ) {
+
+            loginOtpInputs[index - 1].focus();
+
+        }
+
+    });
+
+});
+
+
+function updateLoginOtp() {
+
+    let otp = "";
+
+    loginOtpInputs.forEach(input => {
+
+        otp += input.value;
+
+    });
+
+    loginOtpValue.value = otp;
+
+}
+
+
+loginOtpForm.addEventListener("submit", function (event) {
+
+    updateLoginOtp();
+
+    if (loginOtpValue.value.length !== 6) {
+
+        event.preventDefault();
+
+        alert("Please enter the complete 6-digit OTP.");
+
+    }
+
+});
+
+
+let loginRemainingTime = 10;
+
+
+const loginTimerInterval = setInterval(function () {
+
+    loginRemainingTime--;
+
+    if (loginRemainingTime >= 0) {
+
+        loginOtpTimer.textContent =
+            loginRemainingTime;
+
+    }
+
+
+    if (loginRemainingTime <= 0) {
+
+        clearInterval(loginTimerInterval);
+
+        loginOtpTimer.textContent = "0";
+
+        loginExpiredMessage.style.display =
+            "block";
+
+        loginVerifyButton.disabled = true;
+
+
+        loginOtpInputs.forEach(input => {
+
+            input.disabled = true;
+
+        });
+
+
+        if (demoLoginOtp) {
+
+            demoLoginOtp.style.display =
+                "none";
+
+        }
+
+    }
+
+}, 1000);
+
+</script>
+
+
+</body>
+
+</html>

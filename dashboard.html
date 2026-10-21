@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Dashboard - Rural Digital Banking</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        Rural Digital Banking
+    </div>
+
+    <div class="dashboard-user">
+
+        Welcome, {{ username }}
+
+        <a href="/settings">Settings</a>
+        <a href="/logout">Logout</a>
+
+    </div>
+
+</header>
+
+<div class="dashboard-container">
+
+    <div class="dashboard-header">
+
+        <div>
+
+            <h1>
+                Banking Dashboard
+            </h1>
+
+            <p>
+                Manage your account securely
+            </p>
+
+        </div>
+
+        <div class="security-status">
+
+            <span></span>
+
+            Account Secure
+
+        </div>
+
+    </div>
+
+    <div class="balance-card">
+
+        <div>
+
+            <p class="balance-label">
+                Available Balance
+            </p>
+
+            <h2>
+                ₹ {{ "%.2f"|format(balance) }}
+            </h2>
+
+            <p class="account-number">
+                Account No: {{ account_number }}
+            </p>
+
+        </div>
+
+        <div class="balance-icon">
+            ₹
+        </div>
+
+    </div>
+
+    <div class="quick-actions">
+
+        <a href="/deposit" class="action-card">
+
+            <div class="action-icon">
+                +
+            </div>
+
+            <h3>
+                Deposit
+            </h3>
+
+            <p>
+                Add money to account
+            </p>
+
+        </a>
+
+        <a href="/withdraw" class="action-card">
+
+            <div class="action-icon">
+                −
+            </div>
+
+            <h3>
+                Withdraw
+            </h3>
+
+            <p>
+                Withdraw money
+            </p>
+
+        </a>
+
+        <a href="/payments" class="action-card payment-action">
+
+            <div class="action-icon">
+                ₹
+            </div>
+
+            <h3>Payments</h3>
+
+            <p>Send money like a UPI app</p>
+
+        </a>
+
+        <a href="/transactions" class="action-card">
+
+            <div class="action-icon">
+                ↕
+            </div>
+
+            <h3>
+                Transactions
+            </h3>
+
+            <p>
+                View transaction history
+            </p>
+
+        </a>
+
+    </div>
+
+    <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+
+            <div class="card-title">
+
+                <h2>
+                    Recent Transactions
+                </h2>
+
+                <a href="/transactions">
+                    View All
+                </a>
+
+            </div>
+
+            {% if transactions %}
+
+                {% for transaction in transactions %}
+
+                <div class="transaction">
+
+                    <div class="transaction-info">
+
+                        <strong>
+                            {{ transaction[1] }}
+                        </strong>
+
+                        <span>
+                            {{ transaction[3] }}
+                        </span>
+
+                    </div>
+
+                    {% if transaction[0] == "DEPOSIT" or transaction[0] == "TRANSFER_RECEIVED" %}
+
+                    <div class="transaction-amount credit">
+
+                        + ₹{{ "%.2f"|format(transaction[2]) }}
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="transaction-amount debit">
+
+                        − ₹{{ "%.2f"|format(transaction[2]) }}
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="transaction">
+
+                    <div class="transaction-info">
+
+                        <strong>
+                            No transactions yet
+                        </strong>
+
+                        <span>
+                            Your transactions will appear here
+                        </span>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <div class="card-title">
+
+                <h2>
+                    Security Status
+                </h2>
+
+            </div>
+
+            <div class="security-item">
+
+                <div class="security-check">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Password Protected
+                    </strong>
+
+                    <span>
+                        Account password is secured
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="security-item">
+
+                <div class="security-check">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        OTP Verification
+                    </strong>
+
+                    <span>
+                        Two-factor authentication enabled
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="security-item">
+
+                <div class="security-check">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        AI Security Monitoring
+                    </strong>
+
+                    <span>
+                        Real-time threat detection active
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="security-item">
+
+                <div class="security-check">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Secure Session
+                    </strong>
+
+                    <span>
+                        Current session is protected
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer class="footer">
+
+    Rural Digital Banking |
+    AI-Based Cybersecurity Framework
+
+</footer>
+
+<script>
+
+    const dashboardSessionTime = 5 * 60 * 1000;
+
+    setTimeout(function () {
+
+        alert("Time's up! Please login again.");
+
+        window.location.href = "/logout";
+
+    }, dashboardSessionTime);
+
+</script>
+
+</body>
+
+</html>

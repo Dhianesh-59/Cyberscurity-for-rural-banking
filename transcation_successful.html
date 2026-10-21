@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Receipt | Rural Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transaction_successful.css') }}">
+</head>
+<body>
+    <div class="receipt">
+        <div class="success-icon">&#10003;</div>
+        <h1>Payment Successful</h1>
+        <p class="subtitle">Your money has been transferred successfully.</p>
+
+        <h2>₹{{ amount }}</h2>
+        <p class="status">SUCCESSFUL</p>
+
+        <div class="details">
+            <div><span>Transaction ID</span><strong>{{ transaction_id }}</strong></div>
+            <div><span>Date &amp; Time</span><strong>{{ transaction_time }}</strong></div>
+            <div><span>Payment Mode</span><strong>{{ payment_mode }}</strong></div>
+            <div><span>From Account</span><strong>{{ sender_account }}</strong></div>
+            <div><span>To Account</span><strong>{{ receiver_account }}</strong></div>
+            <div><span>Receiver Name</span><strong>{{ receiver_name }}</strong></div>
+        </div>
+
+        <button onclick="window.print()">Download / Print Receipt</button>
+        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </div>
+</body>
+</html>

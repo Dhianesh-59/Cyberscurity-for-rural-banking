@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments - RuralBank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="feature-page payment-page">
+<header class="navbar">
+    <div class="logo">RuralBank <span class="feature-logo-sub">Payments</span></div>
+    <div class="dashboard-user"><a href="/settings">Settings</a><a href="/dashboard">Dashboard</a><a href="/logout">Logout</a></div>
+</header>
+<main class="feature-container payment-layout">
+    <div class="feature-heading"><div><p class="eyebrow payment-eyebrow">SIMPLE. FAST. SECURE.</p><h1>Send money</h1><p>Make an internal RuralBank demo payment to another registered account.</p></div><div class="payment-mark">₹</div></div>
+    <div class="payment-summary">
+        <div><span>Available balance</span><strong>₹{{ "%.2f"|format(balance) }}</strong><small>Account ending {{ account_number[-4:] }}</small></div>
+        <div class="payment-summary-lock">⌑ <span>PIN protected</span></div>
+    </div>
+    {% if error %}<div class="notice error-notice">{{ error }}</div>{% endif %}
+    {% if success %}<div class="notice success-notice"><strong>✓ Payment successful</strong><br>{{ success }}</div>{% endif %}
+    <div class="payment-grid">
+        <section class="panel-card payment-form-card">
+            <div class="panel-title"><div class="panel-symbol payment-symbol">↗</div><div><h2>Pay a contact</h2><p>Enter the registered username, account number, or demo UPI ID.</p></div></div>
+            <form method="post" class="feature-form payment-form">
+                <label>Recipient</label>
+                <input type="text" name="recipient" placeholder="username / account number / username@ruralbank" autocomplete="off" required>
+                <div class="demo-hint">Demo UPI ID format: <strong>username@ruralbank</strong></div>
+                <label>Amount</label>
+                <div class="amount-input"><span>₹</span><input type="number" name="amount" min="0.01" max="100000" step="0.01" placeholder="0.00" required></div>
+                <div class="amount-chips"><button type="button" data-amount="100">₹100</button><button type="button" data-amount="500">₹500</button><button type="button" data-amount="1000">₹1,000</button><button type="button" data-amount="2000">₹2,000</button></div>
+                <label>Payment note <span class="optional-label">Optional</span></label>
+                <input type="text" name="note" maxlength="100" placeholder="e.g. Books, food, travel">
+                <label>4-digit transaction PIN</label>
+                <input type="password" name="transaction_pin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" minlength="4" placeholder="Enter your payment PIN" autocomplete="off" required>
+                <button class="feature-primary-btn purple-btn pay-now-btn" type="submit">Confirm payment <span>→</span></button>
+            </form>
+            <p class="security-footnote">This demo transfers virtual balances only. It does not send real UPI payments.</p>
+        </section>
+        <aside class="panel-card contacts-card">
+            <div class="panel-title"><div><h2>Registered contacts</h2><p>Choose an account to fill the recipient.</p></div></div>
+            {% if beneficiaries %}
+            <div class="beneficiary-list">
+                {% for beneficiary in beneficiaries %}
+                <button type="button" class="beneficiary-item" data-recipient="{{ beneficiary[0] }}">
+                    <span class="beneficiary-avatar">{{ beneficiary[0][:1]|upper }}</span>
+                    <span class="beneficiary-details"><strong>{{ beneficiary[0] }}</strong><small>{{ beneficiary[0] }}@ruralbank</small></span>
+                    <span class="beneficiary-arrow">›</span>
+                </button>
+                {% endfor %}
+            </div>
+            {% else %}<p class="empty-contacts">No other registered accounts yet. Create a second demo user to test payments.</p>{% endif %}
+            <div class="payment-safety"><strong>Payment safety</strong><p>Confirm the recipient before paying. A successful transfer is recorded in both accounts' transaction history.</p></div>
+        </aside>
+    </div>
+    <a class="back-link" href="/dashboard">← Back to dashboard</a>
+</main>
+<footer class="footer">Rural Digital Banking | Demo UPI-style payments</footer>
+<script>
+document.querySelectorAll('[data-amount]').forEach(function(button){button.addEventListener('click',function(){document.querySelector('[name="amount"]').value=button.dataset.amount;});});
+document.querySelectorAll('[data-recipient]').forEach(function(button){button.addEventListener('click',function(){document.querySelector('[name="recipient"]').value=button.dataset.recipient;document.querySelector('[name="amount"]').focus();});});
+</script>
+</body>
+</html>
