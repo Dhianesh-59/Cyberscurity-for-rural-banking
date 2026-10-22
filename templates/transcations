@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - RuralBank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="feature-page">
+<header class="navbar"><div class="logo">RuralBank <span class="feature-logo-sub">Transactions</span></div><div class="dashboard-user"><a href="/payments">Payments</a><a href="/settings">Settings</a><a href="/dashboard">Dashboard</a></div></header>
+<main class="feature-container">
+    <div class="feature-heading"><div><p class="eyebrow">ACCOUNT ACTIVITY</p><h1>Transaction history</h1><p>Deposits, withdrawals, and internal demo payments.</p></div><div class="history-mark">↕</div></div>
+    <section class="panel-card history-card">
+        {% if transactions %}
+        <div class="history-table-wrap"><table class="history-table"><thead><tr><th>Type</th><th>Description</th><th>Amount</th><th>Date</th></tr></thead><tbody>
+        {% for transaction in transactions %}
+        <tr><td><span class="type-pill {% if transaction[0] in ['DEPOSIT','TRANSFER_RECEIVED'] %}type-credit{% else %}type-debit{% endif %}">{{ transaction[0].replace('_',' ') }}</span></td><td>{{ transaction[1] or 'Transaction' }}</td><td class="history-amount {% if transaction[0] in ['DEPOSIT','TRANSFER_RECEIVED'] %}credit{% else %}debit{% endif %}">{% if transaction[0] in ['DEPOSIT','TRANSFER_RECEIVED'] %}+{% else %}−{% endif %} ₹{{ "%.2f"|format(transaction[2]) }}</td><td>{{ transaction[3] }}</td></tr>
+        {% endfor %}
+        </tbody></table></div>
+        {% else %}<div class="empty-history"><div>↕</div><h2>No transactions yet</h2><p>Your account activity will appear here.</p></div>{% endif %}
+    </section>
+    <a class="back-link" href="/dashboard">← Back to dashboard</a>
+</main>
+<footer class="footer">Rural Digital Banking | AI-Based Cybersecurity Framework</footer>
+</body>
+</html>
