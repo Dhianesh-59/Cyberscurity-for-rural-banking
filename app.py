@@ -919,8 +919,9 @@ def transactions():
 
         account_number = account[0]
 
+        # FIXED: Return columns in the same order expected by transactions.html.
         cursor.execute("""
-            SELECT id, transaction_type, description, amount, created_at
+            SELECT transaction_type, description, amount, created_at
             FROM transactions
             WHERE account_number = ?
             ORDER BY id DESC
